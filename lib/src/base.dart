@@ -266,3 +266,46 @@ bool verify(BigInt n, BigInt p, BigInt a, List<BigInt> pointG,
   }
   return false;
 }
+
+List<BigInt> getPointByBigFromPoint(
+    List<BigInt> point, BigInt n, BigInt p, BigInt a, List<BigInt> pointG) {
+  var bin = n.toRadixString(2);
+  List<BigInt> nowPoint = point;
+  var nextPoint = pointG;
+  for (var i = bin.length - 1; i >= 0; i--) {
+    if (bin[i] == '1') {
+      // if (nowPoint == null) {
+      //   nowPoint = nextPoint;
+      // } else {
+      nowPoint =
+          addDiffPoint(nowPoint[0], nowPoint[1], nextPoint[0], nextPoint[1], p);
+      // }
+    }
+
+    nextPoint = addSamePoint(nextPoint[0], nextPoint[1], p, a);
+  }
+
+  return nowPoint;
+}
+
+List<BigInt> pointmultiply(List<BigInt> point, BigInt multiplicator, BigInt p,
+    BigInt a, List<BigInt> pointG) {
+  return getPointByBigFromPoint(point, multiplicator, p, a, pointG);
+  // List<BigInt> r0 = pointG;
+  // List<BigInt> r1 = point;
+
+  // int length = multiplicator.bitLength;
+  // var bin = multiplicator.toRadixString(2);
+
+  // for (var idx = length - 1; idx >= 0; idx--) {
+  //   if (bin[idx] == '1') {
+  //     r0 = addDiffPoint(r0[0], r0[1], r1[0], r1[1], p);
+  //     r1 = addSamePoint(r1[0], r1[1], p, a);
+  //   } else {
+  //     r1 = addDiffPoint(r0[0], r0[1], r1[0], r1[1], p);
+  //     r0 = addSamePoint(r0[0], r0[1], p, a);
+  //   }
+  // }
+
+  // return r0;
+}

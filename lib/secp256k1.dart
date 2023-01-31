@@ -84,6 +84,39 @@ class PublicKey {
   bool operator ==(other) {
     return other is PublicKey && (X == other.X && Y == other.Y);
   }
+
+  Point get point => Point(X, Y);
+}
+
+class Point {
+  late BigInt X;
+  late BigInt Y;
+
+  Point(this.X, this.Y);
+  Point.fromHexes(String x, y) {
+    X = BigInt.parse(x, radix: 16);
+    Y = BigInt.parse(y, radix: 16);
+  }
+
+  Point multiply(BigInt multiplicator) {
+    List<BigInt> el = base.pointmultiply([this.X, this.Y], multiplicator,
+        base.secp256k1.p, base.secp256k1.a, base.secp256k1.G);
+    return Point(el[0], el[1]);
+  }
+
+  PublicKey toPublicKey() {
+    return PublicKey(X, Y);
+  }
+
+  /// generate a hex string from a public key
+  String toHex() {
+    return base.point2Hex([X, Y]);
+  }
+
+  @override
+  String toString() {
+    return toHex();
+  }
 }
 
 class Signature {
